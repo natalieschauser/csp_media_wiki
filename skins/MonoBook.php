@@ -116,7 +116,7 @@ class MonoBookTemplate extends BaseTemplate {
 		?>
 
 	</div>
-	<script type="<?php $this->text('jsmimetype') ?>"> if (window.isMSIE55) fixalpha(); </script>
+	<script type="<?php $this->text('jsmimetype') ?>" src="<?php global $wgScriptPath; echo($wgScriptPath . "/fix_alpha.js");?>"></script>
 <?php
 	$this->renderPortals( $this->data['sidebar'] );
 ?>

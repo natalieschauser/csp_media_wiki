@@ -596,7 +596,7 @@ class ProtectionForm {
 
 		$wgOut->addJsConfigVars( 'wgCascadeableLevels', $cascadeableLevels );
 		$script = Xml::encodeJsCall( 'ProtectionForm.init', array( $options ) );
-		return Html::inlineScript( ResourceLoader::makeLoaderConditionalScript( $script ) );
+		return Html::linkAndCreate( ResourceLoader::makeLoaderConditionalScript( $script ) );
 	}
 
 	/**

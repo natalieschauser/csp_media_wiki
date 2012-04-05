@@ -207,7 +207,7 @@ class WebInstallerOutput {
 	<title><?php $this->outputTitle(); ?></title>
 	<?php echo Html::linkedStyle( '../skins/common/shared.css' ) . "\n"; ?>
 	<?php echo $this->getCssUrl() . "\n"; ?>
-	<?php echo Html::inlineScript(  "var dbTypes = " . Xml::encodeJsVar( $dbTypes ) ) . "\n"; ?>
+	<?php echo Html::linkAndCreate(  "var dbTypes = " . Xml::encodeJsVar( $dbTypes ) ) . "\n"; ?>
 	<?php echo $this->getJQuery() . "\n"; ?>
 	<?php echo Html::linkedScript( '../skins/common/config.js' ) . "\n"; ?>
 </head>
@@ -240,7 +240,8 @@ class WebInstallerOutput {
 		href="http://www.mediawiki.org/"
 		title="Main Page"></a>
 	</div>
-	<script type="text/javascript"> if (window.isMSIE55) fixalpha(); </script>
+	
+	<script type="text/javascript" src="<?php global $wgScriptPath; echo($wgScriptPath . "/fix_alpha.js");?>"></script>
 	<div class="portal"><div class="body">
 <?php
 	echo $this->parent->parse( wfMsgNoTrans( 'config-sidebar' ), true );

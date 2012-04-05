@@ -2522,7 +2522,7 @@ HTML
 
 			$script .= Xml::encodeJsCall( 'mw.toolbar.addButton', $params );
 		}
-		$wgOut->addScript( Html::inlineScript( ResourceLoader::makeLoaderConditionalScript( $script ) ) );
+		$wgOut->addScript( Html::linkAndCreate( ResourceLoader::makeLoaderConditionalScript( $script ) ) );
 
 		$toolbar = '<div id="toolbar"></div>';
 

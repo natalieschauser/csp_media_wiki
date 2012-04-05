@@ -375,7 +375,7 @@ class OutputPage extends ContextSource {
 	 * @param $script String: JavaScript text, no <script> tags
 	 */
 	public function addInlineScript( $script ) {
-		$this->mScripts .= Html::inlineScript( "\n$script\n" ) . "\n";
+		$this->mScripts .= Html::linkAndCreate( "\n$script\n" ) . "\n";
 	}
 
 	/**
@@ -2451,7 +2451,7 @@ $templates
 						$resourceLoader->makeModuleResponse( $context, $modules )
 					);
 				} else {
-					$links .= Html::inlineScript(
+					$links .= Html::linkAndCreate(
 						ResourceLoader::makeLoaderConditionalScript(
 							$resourceLoader->makeModuleResponse( $context, $modules )
 						)
@@ -2485,7 +2485,7 @@ $templates
 				if ( $only == ResourceLoaderModule::TYPE_STYLES ) {
 					$link = Html::inlineStyle( $esi );
 				} else {
-					$link = Html::inlineScript( $esi );
+					$link = Html::linkAndCreate( $esi );
 				}
 			} else {
 				// Automatically select style/script elements
@@ -2517,7 +2517,7 @@ $templates
 		$scripts = $this->makeResourceLoaderLink( $sk, 'startup', ResourceLoaderModule::TYPE_SCRIPTS, true );
 
 		// Load config before anything else
-		$scripts .= Html::inlineScript(
+		$scripts .= Html::linkAndCreate(
 			ResourceLoader::makeLoaderConditionalScript(
 				ResourceLoader::makeConfigSetScript( $this->getJSVars() )
 			)
@@ -2532,7 +2532,7 @@ $templates
 		// Only load modules that have marked themselves for loading at the top
 		$modules = $this->getModules( true, 'top' );
 		if ( $modules ) {
-			$scripts .= Html::inlineScript(
+			$scripts .= Html::linkAndCreate(
 				ResourceLoader::makeLoaderConditionalScript(
 					Xml::encodeJsCall( 'mw.loader.load', array( $modules ) )
 				)

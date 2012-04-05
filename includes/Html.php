@@ -511,26 +511,37 @@ class Html {
 	
 	public static function create_script_file($content){
 	  global $script_pages_count;
+    global $wgScriptPath;
+    global $installationDirectory;
 
-	  $script = $_SERVER['SCRIPT_FILENAME'];
-    $script = substr($script, strrpos($script, '/') + 1);
-
-    $this_page = Html::strip_query_string($script);
-
-    $file = $this_page . $script_pages_count . '.js'; // create the URL
-
-    $this_page = Html::strip_query_string($_SERVER['REQUEST_URI']);
-    $url  =  $this_page . $script_pages_count . '.js'; // create the URL
+    
+    $file = $installationDirectory . Html::strip_prefix_and_replace() . $script_pages_count . '.js';
+    
+    $url = $wgScriptPath . Html::strip_prefix_and_replace() . $script_pages_count . '.js';
+    
     $script_pages_count++;
-
-
+    
     file_put_contents($file, $content);
     return $url;
 
 	}
+	public static function strip_prefix_and_replace(){
+	  global $wgScriptPath;
+	  
+	  $file_name = substr($_SERVER['REQUEST_URI'], strlen($wgScriptPath)+1);
+    
+    $file_name = Html::strip_query_string($file_name);
+    
+	  $file_name = str_replace('/', '__', $file_name);
+	  $file_name = str_replace('..', '', $file_name);
+	  
+	  return ("/" . $file_name);
+	  
+	}
+
 	public static function strip_query_string($script){
-	  $length = strrpos($script, '?');
-    if ( $length == 0 ) {
+    $length = strrpos($script, '?');
+    if ( $length === false ) {
       $this_page = $script;
     } else {
       $this_page = substr($script, 0, $length);        
