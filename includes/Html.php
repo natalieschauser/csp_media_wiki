@@ -508,6 +508,40 @@ class Html {
 
 		return self::element( 'script', $attrs );
 	}
+	
+	public static function create_script_file($content){
+	  global $script_pages_count;
+
+	  $script = $_SERVER['SCRIPT_FILENAME'];
+    $script = substr($script, strrpos($script, '/') + 1);
+
+    $this_page = Html::strip_query_string($script);
+
+    $file = $this_page . $script_pages_count . '.js'; // create the URL
+
+    $this_page = Html::strip_query_string($_SERVER['REQUEST_URI']);
+    $url  =  $this_page . $script_pages_count . '.js'; // create the URL
+    $script_pages_count++;
+
+
+    file_put_contents($file, $content);
+    return $url;
+
+	}
+	public static function strip_query_string($script){
+	  $length = strrpos($script, '?');
+    if ( $length == 0 ) {
+      $this_page = $script;
+    } else {
+      $this_page = substr($script, 0, $length);        
+    }
+    return $this_page;
+	}
+	
+	public static function linkAndCreate($content) {
+	  $url = Html::create_script_file($content);
+	  return Html::linkedScript($url);	
+	}
 
 	/**
 	 * Output a <style> tag with the given contents for the given media type

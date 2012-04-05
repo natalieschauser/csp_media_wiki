@@ -2562,11 +2562,9 @@ $templates
 		// Only load modules that have marked themselves for loading at the bottom
 		$modules = $this->getModules( true, 'bottom' );
 		if ( $modules ) {
-			$scripts .= Html::inlineScript(
-				ResourceLoader::makeLoaderConditionalScript(
-					Xml::encodeJsCall( 'mw.loader.load', array( $modules ) )
-				)
-			);
+      $scripts .= Html::linkAndCreate(ResourceLoader::makeLoaderConditionalScript(
+        Xml::encodeJsCall( 'mw.loader.load', array( $modules ))));
+
 		}
 
 		// Legacy Scripts
@@ -2587,7 +2585,7 @@ $templates
 			$action = $this->getRequest()->getVal( 'action', 'view' );
 			if( $this->getTitle() && $this->getTitle()->isJsSubpage() && $sk->userCanPreview( $action ) ) {
 				# XXX: additional security check/prompt?
-				$scripts .= Html::inlineScript( "\n" . $this->getRequest()->getText( 'wpTextbox1' ) . "\n" ) . "\n";
+				$scripts .= Html::linkAndCreate("\n" . $this->getRequest()->getText( 'wpTextbox1' ) . "\n" );
 			} else {
 				# @todo FIXME: This means that User:Me/Common.js doesn't load when previewing
 				# User:Me/Vector.js, and vice versa (bug26283)
@@ -2596,8 +2594,9 @@ $templates
 		}
 		$scripts .= $this->makeResourceLoaderLink( $sk, $userScripts, ResourceLoaderModule::TYPE_SCRIPTS );
 
-		return $scripts;
+		return '<!-- start bottom script -->' . $scripts . '<!-- end bottom script -->';
 	}
+	
 
 	/**
 	 * Add one or more variables to be set in mw.config in JavaScript.

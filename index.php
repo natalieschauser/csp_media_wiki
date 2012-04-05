@@ -53,5 +53,8 @@ if ( isset( $_SERVER['MW_COMPILED'] ) ) {
 	require ( dirname( __FILE__ ) . '/includes/WebStart.php' );
 }
 
+global $script_pages_count;
+$script_pages_count = 0;
+
 $mediaWiki = new MediaWiki();
 $mediaWiki->run();
