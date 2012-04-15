@@ -1,6 +1,6 @@
 import org.owasp.webscarab.model.Response;
   
 Response response = connection.getResponse();
-response.addHeader("X-Content-Security-Policy", "allow 'self';");
+response.addHeader("X-Content-Security-Policy", "allow 'self'");
 //response.addHeader("X-Content-Security-Policy", "allow 'self';img-src linux.dashexamples.com;");
 connection.setResponse(response);
