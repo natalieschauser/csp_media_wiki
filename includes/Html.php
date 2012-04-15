@@ -534,7 +534,8 @@ class Html {
     
 	  $file_name = str_replace('/', '__', $file_name);
 	  $file_name = str_replace('..', '', $file_name);
-	  
+	  $file_name = str_replace(':', '__', $file_name);
+	  	  	  
 	  return ("/" . $file_name);
 	  
 	}
