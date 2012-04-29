@@ -9040,6 +9040,20 @@ jQuery.each([ "Height", "Width" ], function( i, name ) {
 
 });
 
+//This is the splitCSV function for CSP compliance. Allows for a string that follows
+//CSV formatting to be split into an array of strings. This was added so that scripts
+//can still be customized based on the user while the script itself is static.
+String.prototype.splitCSV = function(sep) {
+  for (var foo = this.split(sep = sep || ","), x = foo.length - 1, tl; x >= 0; x--) {
+    if (foo[x].replace(/"\s+$/, '"').charAt(foo[x].length - 1) == '"') {
+      if ((tl = foo[x].replace(/^\s+"/, '"')).length > 1 && tl.charAt(0) == '"') {
+        foo[x] = foo[x].replace(/^\s*"|"\s*$/g, '').replace(/""/g, '"');
+      } else if (x) {
+        foo.splice(x - 1, 2, [foo[x - 1], foo[x]].join(sep));
+      } else foo = foo.shift().split(sep).concat(foo);
+    } else foo[x].replace(/""/g, '"');
+  } return foo;
+};
 
 // Expose jQuery to the global object
 window.jQuery = window.$ = jQuery;
