@@ -1848,6 +1848,9 @@ class OutputPage extends ContextSource {
 		if ( $frameOptions ) {
 			$response->header( "X-Frame-Options: $frameOptions" );
 		}
+		
+		global $CSPhtml;
+		$this->mBodytext .= $CSPhtml;
 
 		if ( $this->mArticleBodyOnly ) {
 			$this->out( $this->mBodytext );

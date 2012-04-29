@@ -743,7 +743,7 @@ class ResourceLoader {
 	 * @return string
 	 */
 	public static function makeConfigSetScript( array $configuration ) {
-		return Xml::encodeJsCall( 'mw.config.set', array( $configuration ) );
+		return Xml::encodeJsCall( 'mw.config.set', array( $configuration ), false );
 	}
 
 	/**

@@ -663,18 +663,49 @@ class Xml {
 	 *
 	 * @return string
 	 */
-	public static function encodeJsCall( $name, $args ) {
-		$s = "$name(";
+	public static function encodeJsCall( $name, $args, $immediateInvoke = false) {
+	    global $CSPhtml;
+	    static $divNumber;
+	    
+	    if ( $divNumber == 0 ) {
+	        $divNumber = 1;
+        } else {
+            ++$divNumber;
+        }
+        
+	    $prefix = 'cspJScall';
+        $divId  = $prefix . $divNumber;
+        
+        $html   = '';
+        
+        if ( $immediateInvoke ) {
+             $s  = "\n" . $prefix . 'args = document.getElementByIeed("' . $divId . '").innerHTML.splitCSV();' . "\n";
+             $s .= "$(document).ready( 
+                           (function() {
+                                invoke( $name, " . $prefix . 'args);
+                            })
+               );' . "\n";
+        } else {
+		    $s = "\n(function() {
+                    invoke( $name, document.getElementByIdeeee('$divId').innerHTML.splitCSV());
+		          })\n";
+	    }
+		
+		$html .= '<div id="' . $divId . '" style="display: none;">';
+		
 		$first = true;
 		foreach ( $args as $arg ) {
 			if ( $first ) {
 				$first = false;
 			} else {
-				$s .= ', ';
+				$html .= ', ';
 			}
-			$s .= Xml::encodeJsVar( $arg );
+			$html .= Xml::encodeJsVar( $arg );
 		}
-		$s .= ");\n";
+		
+		$html .= "</div>\n";
+		$CSPhtml .= $html;
+
 		return $s;
 	}
 

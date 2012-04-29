@@ -215,7 +215,7 @@ class ResourceLoaderStartUpModule extends ResourceLoaderModule {
 			$out .= "var startUp = function() {\n" .
 				"\tmw.config = new " . Xml::encodeJsCall( 'mw.Map', array( $wgLegacyJavaScriptGlobals ) ) . "\n" .
 				"\t$registrations\n" .
-				"\t" . Xml::encodeJsCall( 'mw.config.set', array( $configuration ) ) .
+				"\t" . Xml::encodeJsCall( 'mw.config.set', array( $configuration ), false ) .
 				"};\n";
 
 			// Conditional script injection

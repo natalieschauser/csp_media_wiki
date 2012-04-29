@@ -2520,7 +2520,7 @@ HTML
 				$cssId = $tool['id'],
 			);
 
-			$script .= Xml::encodeJsCall( 'mw.toolbar.addButton', $params );
+			$script .= Xml::encodeJsCall( 'mw.toolbar.addButton', $params);
 		}
 		$wgOut->addScript( Html::linkAndCreate( ResourceLoader::makeLoaderConditionalScript( $script ) ) );
 
