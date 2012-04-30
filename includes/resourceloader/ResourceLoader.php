@@ -658,9 +658,9 @@ class ResourceLoader {
 	 */
 	public static function makeLoaderStateScript( $name, $state = null ) {
 		if ( is_array( $name ) ) {
-			return Xml::encodeJsCall( 'mw.loader.state', array( $name ) );
+			return Xml::encodeJsCall( 'mw.loader.state', array( $name ) , true );
 		} else {
-			return Xml::encodeJsCall( 'mw.loader.state', array( $name, $state ) );
+			return Xml::encodeJsCall( 'mw.loader.state', array( $name, $state ), true );
 		}
 	}
 
@@ -713,11 +713,11 @@ class ResourceLoader {
 		$dependencies = null, $group = null )
 	{
 		if ( is_array( $name ) ) {
-			return Xml::encodeJsCall( 'mw.loader.register', array( $name ) );
+			return Xml::encodeJsCall( 'mw.loader.register', array( $name ), true );
 		} else {
 			$version = (int) $version > 1 ? (int) $version : 1;
 			return Xml::encodeJsCall( 'mw.loader.register',
-				array( $name, $version, $dependencies, $group ) );
+				array( $name, $version, $dependencies, $group ), true );
 		}
 	}
 
@@ -743,7 +743,7 @@ class ResourceLoader {
 	 * @return string
 	 */
 	public static function makeConfigSetScript( array $configuration ) {
-		return Xml::encodeJsCall( 'mw.config.set', array( $configuration ) );
+		return Xml::encodeJsCall( 'mw.config.set', array( $configuration ), true );
 	}
 
 	/**

@@ -663,21 +663,67 @@ class Xml {
 	 *
 	 * @return string
 	 */
-	public static function encodeJsCall( $name, $args ) {
-		$s = "$name(";
+	public static function encodeJsCall( $name, $args, $immediateInvoke = false) {
+	    global $CSPhtml, $wgOut;
+	    static $divNumber;
+	    
+	    if ( $divNumber == 0 ) {
+	        $divNumber = 1;
+     } else {
+         ++$divNumber;
+     }
+     
+		if ( $divNumber == 15 ) {
+			//print "zzzzzzz";
+			//print_r(debug_backtrace());
+		}
+		
+	    $prefix = 'cspJScall';
+     $divId  = $prefix . $divNumber;
+     						
+     $html   = '';
+		$s      = '';
+	 $tmp = explode(".", $name);
+	 array_pop($tmp);	
+     $this_object = implode('.', $tmp);
+     if ( $immediateInvoke ) {
+         if ( $this_object == 'document' ) {
+             ;
+         } else {
+          $s .= "\njQuery(document).ready(\n
+                        function() {\n
+						   var " . $prefix . 'args = document.getElementById("' . $divId . '").innerHTML.splitCSV();' . "\n
+						   $name.apply( $this_object, " . $prefix . 'args);
+                         }
+            );' . "\n";
+        }
+     } else {
+		    $s .= "\nfunction() {\n
+                 $name.apply( $this_object, document.getElementById('$divId').innerHTML.splitCSV());
+		          }\n";
+	    }
+		
+        // print($s);
+        //ob_flush();
+		
+		$html .= '<div id="' . $divId . '" style="display: none;">';
+		
 		$first = true;
 		foreach ( $args as $arg ) {
 			if ( $first ) {
 				$first = false;
 			} else {
-				$s .= ', ';
+				$html .= ', ';
 			}
-			$s .= Xml::encodeJsVar( $arg );
+			$html .= Xml::encodeJsVar( $arg );
 		}
-		$s .= ");\n";
+		
+		$html .= "</div>\n";
+		$wgOut->addHtml($html);
+		//$CSPhtml .= $html;
+
 		return $s;
 	}
-
 
 	/**
 	 * Check if a string is well-formed XML.

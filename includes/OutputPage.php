@@ -226,6 +226,8 @@ class OutputPage extends ContextSource {
 	 */
 	function __construct( IContextSource $context = null ) {
 		$this->setContext( $context );
+        // global $wgScriptPath;
+        //      $this->mHeadItems = array("<script src='$wgScriptPath/resources/jquery/jquery.js'></script>");
 	}
 
 	/**
@@ -1796,7 +1798,10 @@ class OutputPage extends ContextSource {
 		wfProfileIn( __METHOD__ );
 
 		$response = $this->getRequest()->response();
-
+        
+        // global $CSPhtml;
+        // $this->mBodytext .= $CSPhtml;
+		
 		if ( $this->mRedirect != '' ) {
 			# Standards require redirect URLs to be absolute
 			$this->mRedirect = wfExpandUrl( $this->mRedirect, PROTO_CURRENT );
@@ -1849,6 +1854,7 @@ class OutputPage extends ContextSource {
 			$response->header( "X-Frame-Options: $frameOptions" );
 		}
 
+        
 		if ( $this->mArticleBodyOnly ) {
 			$this->out( $this->mBodytext );
 		} else {
@@ -1868,6 +1874,9 @@ class OutputPage extends ContextSource {
 		$this->sendCacheControl();
 		ob_end_flush();
 		wfProfileOut( __METHOD__ );
+        // global $CSPhtml;
+        //         $this->mBodytext .= $CSPhtml;
+        //         $this->out($CSPhtml);
 	}
 
 	/**
@@ -2534,7 +2543,7 @@ $templates
 		if ( $modules ) {
 			$scripts .= Html::linkAndCreate(
 				ResourceLoader::makeLoaderConditionalScript(
-					Xml::encodeJsCall( 'mw.loader.load', array( $modules ) )
+					Xml::encodeJsCall( 'mw.loader.load', array( $modules ), true )
 				)
 			);
 		}
@@ -2563,7 +2572,7 @@ $templates
 		$modules = $this->getModules( true, 'bottom' );
 		if ( $modules ) {
       $scripts .= Html::linkAndCreate(ResourceLoader::makeLoaderConditionalScript(
-        Xml::encodeJsCall( 'mw.loader.load', array( $modules ))));
+        Xml::encodeJsCall( 'mw.loader.load', array( $modules ), true )));
 
 		}
 
@@ -2688,7 +2697,7 @@ $templates
 			$wgSitename, $wgVersion, $wgHtml5, $wgMimeType,
 			$wgFeed, $wgOverrideSiteFeed, $wgAdvertisedFeedTypes,
 			$wgDisableLangConversion, $wgCanonicalLanguageLinks, $wgContLang,
-			$wgRightsPage, $wgRightsUrl;
+			$wgRightsPage, $wgRightsUrl, $wgScriptPath, $wgServer;
 
 		$tags = array();
 
@@ -2723,7 +2732,10 @@ $templates
 				'content' => $p,
 			) );
 		}
-
+        
+        $tags[] = Html::element('script', array(
+           'src' => $wgServer . $wgScriptPath . '/resources/jquery/jquery.js' 
+        ));
 		if ( count( $this->mKeywords ) > 0 ) {
 			$strip = array(
 				"/<.*?" . ">/" => '',
