@@ -752,10 +752,12 @@ class ResourceLoader {
 	 *
 	 * @return string
 	 */
+	 // We changed it so that it does not return anything -- we make sure that evey function that is calling this function is okay with this
 	public static function makeConfigSetScript( array $configuration ) {
-        return Xml::encodeJsCall( 'mw.config.set', array( $configuration ) );
-        // Xml::cspEncodeJsCall( 'mw.config.set', array( $configuration ) );
-        // return "";
+        //return Xml::encodeJsCall( 'mw.config.set', array( $configuration ) );
+        Xml::cspEncodeJsCall( 'mw.config.set', array( $configuration ) );
+        return "";
+        
 		
 	}
 

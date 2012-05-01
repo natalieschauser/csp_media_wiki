@@ -299,12 +299,12 @@ abstract class Skin extends ContextSource {
 
 	static function makeVariablesScript( $data ) {
 		if ( $data ) {
-            // return ResourceLoader::makeConfigSetScript( $data );
+            return ResourceLoader::makeConfigSetScript( $data ); // this now returns nothing. We made sure that every where where this function is being called this is okay
 			
 			
-            return Html::inlineScript(
-             ResourceLoader::makeLoaderConditionalScript( ResourceLoader::makeConfigSetScript( $data ) )
-            );
+            // return Html::inlineScript(
+            //  ResourceLoader::makeLoaderConditionalScript( ResourceLoader::makeConfigSetScript( $data ) )
+            // );
 		} else {
 			return '';
 		}
@@ -411,6 +411,7 @@ abstract class Skin extends ContextSource {
 	 * @param $unused Unused
 	 * @return string HTML fragment
 	 */
+	// This function is never called -- we made it so that makeVariablesScripts does not return anything
 	public static function makeGlobalVariablesScript( $unused ) {
 		global $wgOut;
 

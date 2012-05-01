@@ -474,6 +474,7 @@ class Html {
 	 * @param $contents string JavaScript
 	 * @return string Raw HTML
 	 */
+	 // Note due to CSP this function should never be called
 	public static function inlineScript( $contents ) {
 		global $wgHtml5, $wgJsMimeType, $wgWellFormedXml;
 

@@ -1119,6 +1119,8 @@ class UploadForm extends HTMLForm {
 			'wgMaxUploadSize' => $this->mMaxUploadSize,
 		);
 
+        // We modified it so that makeVariablesScript does not return the inline script, rather it will be put in a div and called via javascript
+        // keeping this line, but it will not add a script
 		$wgOut->addScript( Skin::makeVariablesScript( $scriptVars ) );
 
 

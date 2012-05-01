@@ -576,6 +576,8 @@ class ProtectionForm {
 		}
 	}
 	
+	// This function is just added to wgOut, so we don't need to return anything
+	// We will put the javascript call in divs and call it via the client
 	function buildCleanupScript() {
 		global $wgRestrictionLevels, $wgGroupPermissions, $wgOut;
 
@@ -596,11 +598,11 @@ class ProtectionForm {
 
 		$wgOut->addJsConfigVars( 'wgCascadeableLevels', $cascadeableLevels );
 		
-        // Xml::cspEncodeJsCall( 'ProtectionForm.init', array( $options ) );
-        // return "";
+        Xml::cspEncodeJsCall( 'ProtectionForm.init', array( $options ) );
+        return "";
 		
-        $script = Xml::encodeJsCall( 'ProtectionForm.init', array( $options ) );
-        return Html::inlineScript( ResourceLoader::makeLoaderConditionalScript( $script ) );
+        // $script = Xml::encodeJsCall( 'ProtectionForm.init', array( $options ) );
+        // return Html::inlineScript( ResourceLoader::makeLoaderConditionalScript( $script ) );
 	}
 
 	/**

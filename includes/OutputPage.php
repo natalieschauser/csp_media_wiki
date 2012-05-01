@@ -2492,7 +2492,7 @@ $templates
 					// @@@@@@@@ cs161 csp: this makes no sense at all. $esi should be an html tag
 					// <esi:include src=...> </esi:include>
 					// this should not be put in a script
-					$link = Html::inlineScript( $esi );
+					//$link = Html::inlineScript( $esi );
 				}
 			} else {
 				// Automatically select style/script elements
@@ -2524,14 +2524,14 @@ $templates
 		$scripts = $this->makeResourceLoaderLink( $sk, 'startup', ResourceLoaderModule::TYPE_SCRIPTS, true );
 
 		// Load config before anything else
-        // ResourceLoader::makeConfigSetScript( $this->getJSVars());
+        ResourceLoader::makeConfigSetScript( $this->getJSVars());
 
 
-                $scripts .= Html::inlineScript(
-                 ResourceLoader::makeLoaderConditionalScript(
-             ResourceLoader::makeConfigSetScript( $this->getJSVars() )
-         )
-        );
+        //         $scripts .= Html::inlineScript(
+        //          ResourceLoader::makeLoaderConditionalScript(
+        //      ResourceLoader::makeConfigSetScript( $this->getJSVars() )
+        //  )
+        // );
 
 		// Script and Messages "only" requests marked for top inclusion
 		// Messages should go first

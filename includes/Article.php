@@ -775,9 +775,9 @@ class Article extends Page {
 				if ( strval( $this->getTitle()->getFragment() ) != '' ) {
 					$fragment = Xml::escapeJsString( $this->getTitle()->getFragmentForURL() );
 					// @@@@@@@ Changes not yet tested
-                    // $wgOut->addHtml('<div id="fragmentRedirect" style="display: none;" data-fragment="' . $fragment . '"></div>');
-                    // $wgOut->addLinkedScript($wgScriptPath . 'fragmentRedirect.js');
-					$wgOut->addInlineScript( "redirectToFragment(\"$fragment\");" );
+                    $wgOut->addHtml('<div id="fragmentRedirect" style="display: none;" data-fragment="' . $fragment . '"></div>');
+                    $wgOut->addLinkedScript($wgScriptPath . 'fragmentRedirect.js');
+					//$wgOut->addInlineScript( "redirectToFragment(\"$fragment\");" );
 				}
 
 				// Add a <link rel="canonical"> tag
