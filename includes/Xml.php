@@ -680,7 +680,9 @@ class Xml {
 		
 	    $prefix = 'cspJScall';
      $divId  = $prefix . $divNumber;
-     						
+     if ( substr($name, 0, 3) == 'mw.')	{
+         $name = 'window.' . $name;
+     }					
      $html   = '';
 		$s      = '';
 	 $tmp = explode(".", $name);
