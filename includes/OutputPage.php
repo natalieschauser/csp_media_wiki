@@ -374,9 +374,10 @@ class OutputPage extends ContextSource {
 	 *
 	 * @param $script String: JavaScript text, no <script> tags
 	 */
-	public function addInlineScript( $script ) {
-		$this->mScripts .= Html::inlineScript( "\n$script\n" ) . "\n";
-	}
+    // @@@@ Please don't ever use this
+    public function addInlineScript( $script ) {
+     $this->mScripts .= Html::inlineScript( "\n$script\n" ) . "\n";
+    }
 
 	/**
 	 * Get all registered JS and CSS tags for the header.
@@ -2451,11 +2452,14 @@ $templates
 						$resourceLoader->makeModuleResponse( $context, $modules )
 					);
 				} else {
-					$links .= Html::inlineScript(
-						ResourceLoader::makeLoaderConditionalScript(
-							$resourceLoader->makeModuleResponse( $context, $modules )
-						)
-					);
+                    // $resourceLoader->makeModuleResponse( $context, $modules );
+					
+					
+                    $links .= Html::inlineScript(
+                     ResourceLoader::makeLoaderConditionalScript(
+                         $resourceLoader->makeModuleResponse( $context, $modules )
+                     )
+                    );
 				}
 				continue;
 			}
@@ -2485,6 +2489,9 @@ $templates
 				if ( $only == ResourceLoaderModule::TYPE_STYLES ) {
 					$link = Html::inlineStyle( $esi );
 				} else {
+					// @@@@@@@@ cs161 csp: this makes no sense at all. $esi should be an html tag
+					// <esi:include src=...> </esi:include>
+					// this should not be put in a script
 					$link = Html::inlineScript( $esi );
 				}
 			} else {
@@ -2517,11 +2524,14 @@ $templates
 		$scripts = $this->makeResourceLoaderLink( $sk, 'startup', ResourceLoaderModule::TYPE_SCRIPTS, true );
 
 		// Load config before anything else
-		$scripts .= Html::inlineScript(
-			ResourceLoader::makeLoaderConditionalScript(
-				ResourceLoader::makeConfigSetScript( $this->getJSVars() )
-			)
-		);
+        // ResourceLoader::makeConfigSetScript( $this->getJSVars());
+
+
+                $scripts .= Html::inlineScript(
+                 ResourceLoader::makeLoaderConditionalScript(
+             ResourceLoader::makeConfigSetScript( $this->getJSVars() )
+         )
+        );
 
 		// Script and Messages "only" requests marked for top inclusion
 		// Messages should go first
@@ -2532,11 +2542,13 @@ $templates
 		// Only load modules that have marked themselves for loading at the top
 		$modules = $this->getModules( true, 'top' );
 		if ( $modules ) {
-			$scripts .= Html::inlineScript(
-				ResourceLoader::makeLoaderConditionalScript(
-					Xml::encodeJsCall( 'mw.loader.load', array( $modules ) )
-				)
-			);
+            Xml::cspEncodeJsCall( 'mw.loader.load', array( $modules ));
+            // $scripts .= Html::inlineScript(
+            //  ResourceLoader::makeLoaderConditionalScript(
+            //      Xml::encodeJsCall( 'mw.loader.load', array( $modules ) )
+            //  )
+            // );
+
 		}
 
 		return $scripts;
@@ -2562,11 +2574,12 @@ $templates
 		// Only load modules that have marked themselves for loading at the bottom
 		$modules = $this->getModules( true, 'bottom' );
 		if ( $modules ) {
-			$scripts .= Html::inlineScript(
-				ResourceLoader::makeLoaderConditionalScript(
-					Xml::encodeJsCall( 'mw.loader.load', array( $modules ) )
-				)
-			);
+            Xml::cspEncodeJsCall( 'mw.loader.load', array( $modules ));
+            // $scripts .= Html::inlineScript(
+            //  ResourceLoader::makeLoaderConditionalScript(
+            //      Xml::encodeJsCall( 'mw.loader.load', array( $modules ) )
+            //  )
+            // );
 		}
 
 		// Legacy Scripts
@@ -2595,6 +2608,9 @@ $templates
 			}
 		}
 		$scripts .= $this->makeResourceLoaderLink( $sk, $userScripts, ResourceLoaderModule::TYPE_SCRIPTS );
+
+        global $wgScriptPath;
+        $scripts .= "<script src='$wgScriptPath/" . "clientCall.js'></script>";
 
 		return $scripts;
 	}

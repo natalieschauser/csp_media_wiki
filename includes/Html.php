@@ -488,6 +488,7 @@ class Html {
 		}
 
 		return self::rawElement( 'script', $attrs, $contents );
+		//return "";
 	}
 
 	/**

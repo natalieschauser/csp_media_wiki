@@ -677,7 +677,25 @@ class Xml {
 		$s .= ");\n";
 		return $s;
 	}
-
+	
+	public static function cspEncodeJSCall($name, $args){
+	    global $wgOut;
+	    
+	    if ( substr($name, 0, strlen("mw.loader")) == 'mw.loader' ) {
+	        $divName = 'clientFxnHighPriority';
+	    } else {
+	        $divName = 'clientFxn';
+	    }
+	    
+	    $html  = '<div name="' . $divName . '" style="display: none;" data-fxn-name="' . $name . '" data-fxn-num-args="' . count($args) . '"';
+	    for ( $i = 0; $i < count($args); ++$i ) {
+	        $x = Xml::encodeJsVar($args[$i]);
+	        $x = str_replace("\"", "&quot;", $x);
+	        $html .= ' data-fxn-arg' . $i . '="' . $x  . '"';
+	    }
+	    $html .= '></div>';
+        $wgOut->addHtml($html);
+	}
 
 	/**
 	 * Check if a string is well-formed XML.

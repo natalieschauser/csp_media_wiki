@@ -592,14 +592,24 @@ class ResourceLoader {
 		} elseif ( !is_array( $scripts ) ) {
 			throw new MWException( 'Invalid scripts error. Array of URLs or string of code expected.' );
 		}
-		return Xml::encodeJsCall(
-			'mw.loader.implement',
-			array(
-				$name,
-				$scripts,
-				(object)$styles,
-				(object)$messages
-			) );
+        // Xml::cspEncodeJsCall(
+        //  'mw.loader.implement',
+        //  array(
+        //      $name,
+        //      $scripts,
+        //      (object)$styles,
+        //      (object)$messages
+        //  ) );
+        // return "";   
+        return Xml::encodeJsCall(
+         'mw.loader.implement',
+         array(
+             $name,
+             $scripts,
+             (object)$styles,
+             (object)$messages
+         ) );
+			
 	}
 
 	/**
@@ -743,7 +753,10 @@ class ResourceLoader {
 	 * @return string
 	 */
 	public static function makeConfigSetScript( array $configuration ) {
-		return Xml::encodeJsCall( 'mw.config.set', array( $configuration ) );
+        return Xml::encodeJsCall( 'mw.config.set', array( $configuration ) );
+        // Xml::cspEncodeJsCall( 'mw.config.set', array( $configuration ) );
+        // return "";
+		
 	}
 
 	/**

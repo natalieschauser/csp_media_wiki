@@ -162,7 +162,7 @@ class CSSMin {
 				// using Z for the timezone, meaning GMT
 				$url .= '?' . gmdate( 'Y-m-d\TH:i:s\Z', round( filemtime( $file ), -2 ) );
 				// Embedding requires a bit of extra processing, so let's skip that if we can
-				if ( $embed ) {
+				if ( $embed && false ) {
 					$type = self::getMimeType( $file );
 					// Detect when URLs were preceeded with embed tags, and also verify file size is
 					// below the limit

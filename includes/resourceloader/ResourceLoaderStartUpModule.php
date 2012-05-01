@@ -217,6 +217,15 @@ class ResourceLoaderStartUpModule extends ResourceLoaderModule {
 				"\t$registrations\n" .
 				"\t" . Xml::encodeJsCall( 'mw.config.set', array( $configuration ) ) .
 				"};\n";
+				
+            // $out .= "var startUp = function() {\n" .
+            //     "\tjQuery(document).ready("
+            //  "\t  mw.config = new mw.Map(getClientFxnArgs(" . Xml::encodeJsArgs(array($wgLegacyJavaScriptGlobals)) . "))" . "\n" .
+            //  "\t  $registrations\n" .
+            //  "\t  " . Xml::encodeJsCall( 'mw.config.set', array( $configuration ) ) .
+            //  ");
+            //  };\n";
+				
 
 			// Conditional script injection
 			$scriptTag = Html::linkedScript( $wgLoadScript . '?' . wfArrayToCGI( $query ) );

@@ -247,7 +247,7 @@ class VectorTemplate extends BaseTemplate {
 		</div>
 		<!-- /footer -->
 		<!-- fixalpha -->
-		<script type="<?php $this->text( 'jsmimetype' ) ?>"> if ( window.isMSIE55 ) fixalpha(); </script>
+<script type="<?php $this->text('jsmimetype') ?>" src="<?php global $wgScriptPath; echo($wgScriptPath . "/fix_alpha.js");?>"></script>
 		<!-- /fixalpha -->
 		<?php $this->printTrail(); ?>
 

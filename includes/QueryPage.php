@@ -475,7 +475,13 @@ abstract class QueryPage extends SpecialPage {
 					$updateddate = $wgLang->date( $ts, true, true );
 					$updatedtime = $wgLang->time( $ts, true, true );
 					$wgOut->addMeta( 'Data-Cache-Time', $ts );
-					$wgOut->addInlineScript( "var dataCacheTime = '$ts';" );
+					
+					// @@@@@@@ Changes not yet tested
+                    // $wgOut->addHtml('<div id="dataCacheTime" style="display: none;" data-dataCacheTime="' . $ts . '"></div>');
+                    // $wgOut->addLinkedScript($wgScriptPath . 'dataCacheTime.js');
+					
+                    $wgOut->addInlineScript( "var dataCacheTime = '$ts';" );
+					
 					$wgOut->addWikiMsg( 'perfcachedts', $updated, $updateddate, $updatedtime );
 				} else {
 					$wgOut->addWikiMsg( 'perfcached' );

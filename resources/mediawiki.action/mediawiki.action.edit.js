@@ -1,13 +1,14 @@
 (function( $ ) {
 	// currentFocus is used to determine where to insert tags
 	var currentFocused = $( '#wpTextbox1' );
-	
+	//alert("I have created the toolbar");
 	mw.toolbar = {
 		$toolbar : $( '#toolbar' ),
 		buttons : [],
 		// If you want to add buttons, use 
 		// mw.toolbar.addButton( imageFile, speedTip, tagOpen, tagClose, sampleText, imageId, selectText );
 		addButton : function() {
+            // alert("!!!!!!!!!!!!!!! " + this);
 			this.buttons.push( [].slice.call( arguments ) );
 		},
 		insertButton : function( imageFile, speedTip, tagOpen, tagClose, sampleText, imageId, selectText ) {

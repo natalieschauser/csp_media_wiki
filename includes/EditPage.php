@@ -2520,9 +2520,14 @@ HTML
 				$cssId = $tool['id'],
 			);
 
-			$script .= Xml::encodeJsCall( 'mw.toolbar.addButton', $params );
-		}
-		$wgOut->addScript( Html::inlineScript( ResourceLoader::makeLoaderConditionalScript( $script ) ) );
+         $script .= Xml::cspEncodeJsCall( 'mw.toolbar.addButton', $params );
+        }
+        //$wgOut->addScript( Html::inlineScript( ResourceLoader::makeLoaderConditionalScript( $script ) ) );
+
+        //  $script .= Xml::encodeJsCall( 'mw.toolbar.addButton', $params );
+        // }
+        // $wgOut->addScript( Html::inlineScript( ResourceLoader::makeLoaderConditionalScript( $script ) ) );
+
 
 		$toolbar = '<div id="toolbar"></div>';
 
