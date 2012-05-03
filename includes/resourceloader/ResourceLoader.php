@@ -592,15 +592,6 @@ class ResourceLoader {
 		} elseif ( !is_array( $scripts ) ) {
 			throw new MWException( 'Invalid scripts error. Array of URLs or string of code expected.' );
 		}
-        // Xml::cspEncodeJsCall(
-        //  'mw.loader.implement',
-        //  array(
-        //      $name,
-        //      $scripts,
-        //      (object)$styles,
-        //      (object)$messages
-        //  ) );
-        // return "";   
         return Xml::encodeJsCall(
          'mw.loader.implement',
          array(

@@ -200,6 +200,7 @@ class WebInstallerOutput {
 		}
 
 ?>
+// $dbTypes is completely statically defined in installer.php (search for $dbTypes)
 <?php echo Html::htmlHeader( $this->getHeadAttribs() ); ?>
 <head>
 	<meta name="robots" content="noindex, nofollow" />
@@ -207,7 +208,7 @@ class WebInstallerOutput {
 	<title><?php $this->outputTitle(); ?></title>
 	<?php echo Html::linkedStyle( '../skins/common/shared.css' ) . "\n"; ?>
 	<?php echo $this->getCssUrl() . "\n"; ?>
-	<?php echo Html::inlineScript(  "var dbTypes = " . Xml::encodeJsVar( $dbTypes ) ) . "\n"; ?>
+	<?php echo Html::inlineScript(  "var dbTypes = " . Xml::encodeJsVar( $dbTypes ) ) . "\n"; ?> 
 	<?php echo $this->getJQuery() . "\n"; ?>
 	<?php echo Html::linkedScript( '../skins/common/config.js' ) . "\n"; ?>
 </head>

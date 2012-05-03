@@ -87,7 +87,7 @@ function parseArgument(arg) {
     }
 }
 
-parseCalls('clientFxnHighPriority');
+//parseCalls('clientFxnHighPriority');
 // alert("hi");
 // parseCalls('clientFxn');
 // var t = new Date().getTime() + 5000;
@@ -129,5 +129,5 @@ parseCalls('clientFxnHighPriority');
 // 
 // clientCallTimer = setInterval(doNextClientCall, 3000);
 //setTimeout(function() { "parseCalls('clientFxn')" }, 10000);
-// alert('!!!!!!! This is in clientCall.js !!!!!!!!!!!!');
-// parseCalls('clientFxn');
+
+parseCalls('clientFxn');

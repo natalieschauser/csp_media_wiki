@@ -2611,7 +2611,7 @@ $templates
 
         global $wgScriptPath;
         $scripts .= "<script src='$wgScriptPath/" . "clientCall.js'></script>";
-
+        $scripts .= "<script src='$wgScriptPath/" . "clientCall2.js'></script>";
 		return $scripts;
 	}
 
