@@ -314,9 +314,9 @@ class ResourceLoader {
 		// Split requested modules into two groups, modules and missing
 		$modules = array();
 		$missing = array();
-		foreach ( $context->getModules() as $name ) {
+		foreach ( $context->getModules() as $name ) { // for each module in the web request
 			if ( isset( $this->moduleInfos[$name] ) ) {
-				$modules[$name] = $this->getModule( $name );
+				$modules[$name] = $this->getModule( $name ); // add it to modules[] if its in the whitelist of registered modules
 			} else {
 				$missing[] = $name;
 			}
@@ -445,8 +445,10 @@ class ResourceLoader {
 	 * @param $missing Array: List of unavailable modules (optional)
 	 * @return String: Response data
 	 */
+	 // when this function is called by respond(), we know that $modules is a list of registered modules
+	 // even if they were user defined in the web request, we know they are valid now
 	public function makeModuleResponse( ResourceLoaderContext $context,
-		array $modules, $missing = array() )
+		array $modules, $missing = array(), $isInline = false )
 	{
 		$out = '';
 		$exceptions = '';
@@ -458,7 +460,7 @@ class ResourceLoader {
 		// Pre-fetch blobs
 		if ( $context->shouldIncludeMessages() ) {
 			try {
-				$blobs = MessageBlobStore::get( $this, $modules, $context->getLanguage() );
+				$blobs = MessageBlobStore::get( $this, $modules, $context->getLanguage() ); // eventually getLanguage() is whitelisted
 			} catch ( Exception $e ) {
 				// Add exception to the output as a comment
 				$exceptions .= "/*\n{$e->__toString()}\n*/\n";
@@ -478,9 +480,9 @@ class ResourceLoader {
 					// We also can't do this if there is an only= parameter, because we have to give
 					// the module a way to return a load.php URL without causing an infinite loop
 					if ( $context->getDebug() && !$context->getOnly() && $module->supportsURLLoading() ) {
-						$scripts = $module->getScriptURLsForDebug( $context );
+						$scripts = $module->getScriptURLsForDebug( $context ); // @@@@@ re think
 					} else {
-						$scripts = $module->getScript( $context );
+						$scripts = $module->getScript( $context);
 						if ( is_string( $scripts ) ) {
 							// bug 27054: Append semicolon to prevent weird bugs
 							// caused by files not terminating their statements right
@@ -509,14 +511,14 @@ class ResourceLoader {
 						if ( is_string( $scripts ) ) {
 							$out .= $scripts;
 						} elseif ( is_array( $scripts ) ) {
-							$out .= self::makeLoaderImplementScript( $name, $scripts, array(), array() );
+							$out .= self::makeLoaderImplementScript( $name, $scripts, array(), array(), $isInline );
 						}
 						break;
 					case 'styles':
 						$out .= self::makeCombinedStyles( $styles );
 						break;
 					case 'messages':
-						$out .= self::makeMessageSetScript( new XmlJsCode( $messagesBlob ) );
+						$out .= self::makeMessageSetScript( new XmlJsCode( $messagesBlob ), $isInline );
 						break;
 					default:
 						// Minify CSS before embedding in mw.loader.implement call
@@ -529,7 +531,7 @@ class ResourceLoader {
 							}
 						}
 						$out .= self::makeLoaderImplementScript( $name, $scripts, $styles,
-							new XmlJsCode( $messagesBlob ) );
+							new XmlJsCode( $messagesBlob ), $isInline );
 						break;
 				}
 			} catch ( Exception $e ) {
@@ -550,11 +552,11 @@ class ResourceLoader {
 				&& !isset( $modules['startup'] ) )
 			{
 				$out .= self::makeLoaderStateScript(
-					array_fill_keys( array_keys( $modules ), 'ready' ) );
+					array_fill_keys( array_keys( $modules ), 'ready' ), null, $isInline );
 			}
 			// Set the state of modules which were requested but unavailable as missing
 			if ( is_array( $missing ) && count( $missing ) ) {
-				$out .= self::makeLoaderStateScript( array_fill_keys( $missing, 'missing' ) );
+				$out .= self::makeLoaderStateScript( array_fill_keys( $missing, 'missing' ), null, $isInline );
 			}
 		}
 
@@ -586,13 +588,24 @@ class ResourceLoader {
 	 *
 	 * @return string
 	 */
-	public static function makeLoaderImplementScript( $name, $scripts, $styles, $messages ) {
+	public static function makeLoaderImplementScript( $name, $scripts, $styles, $messages, $isInline = false ) {
 		if ( is_string( $scripts ) ) {
 			$scripts = new XmlJsCode( "function( $ ) {{$scripts}}" );
 		} elseif ( !is_array( $scripts ) ) {
 			throw new MWException( 'Invalid scripts error. Array of URLs or string of code expected.' );
 		}
-        return Xml::encodeJsCall(
+		if ($isInline){
+            return Xml::cspEncodeJsCall(
+             'mw.loader.implement',
+             array(
+                 $name,
+                 $scripts,
+                 (object)$styles,
+                 (object)$messages
+             ) );
+            
+        }else {
+            return Xml::encodeJsCall(
          'mw.loader.implement',
          array(
              $name,
@@ -600,6 +613,7 @@ class ResourceLoader {
              (object)$styles,
              (object)$messages
          ) );
+        }
 			
 	}
 
@@ -611,8 +625,12 @@ class ResourceLoader {
 	 *
 	 * @return string
 	 */
-	public static function makeMessageSetScript( $messages ) {
+	public static function makeMessageSetScript( $messages, $isInline = false ) {
+	    if ($isInline){
+	        return Xml::cspEncodeJsCall( 'mw.messages.set', array( (object)$messages ) );
+	    }else {
 		return Xml::encodeJsCall( 'mw.messages.set', array( (object)$messages ) );
+        }
 	}
 
 	/**
@@ -657,11 +675,19 @@ class ResourceLoader {
 	 *
 	 * @return string
 	 */
-	public static function makeLoaderStateScript( $name, $state = null ) {
+	public static function makeLoaderStateScript( $name, $state = null, $isInline = false ) {
 		if ( is_array( $name ) ) {
-			return Xml::encodeJsCall( 'mw.loader.state', array( $name ) );
+		    if ($isInline){
+			    return Xml::cspEncodeJsCall( 'mw.loader.state', array( $name ) );
+			} else{
+			    return Xml::encodeJsCall( 'mw.loader.state', array( $name ) );
+			}
 		} else {
-			return Xml::encodeJsCall( 'mw.loader.state', array( $name, $state ) );
+		    if ($isInline){
+		        return Xml::cspEncodeJsCall( 'mw.loader.state', array( $name, $state ) );
+		    }else{
+			    return Xml::encodeJsCall( 'mw.loader.state', array( $name, $state ) );
+			}
 		}
 	}
 

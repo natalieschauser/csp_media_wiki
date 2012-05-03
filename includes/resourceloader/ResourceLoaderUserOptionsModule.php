@@ -75,7 +75,7 @@ class ResourceLoaderUserOptionsModule extends ResourceLoaderModule {
 	 * @return string
 	 */
 	public function getScript( ResourceLoaderContext $context ) {
-		return Xml::encodeJsCall( 'mw.user.options.set', 
+		return Xml::cspEncodeJsCall( 'mw.user.options.set', 
 			array( $this->contextUserOptions( $context ) ) );
 	}
 

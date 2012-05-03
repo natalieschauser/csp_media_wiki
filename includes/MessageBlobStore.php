@@ -316,7 +316,7 @@ class MessageBlobStore {
 		$dbr = wfGetDB( DB_SLAVE );
 		$res = $dbr->select( 'msg_resource',
 			array( 'mr_blob', 'mr_resource', 'mr_timestamp' ),
-			array( 'mr_resource' => $modules, 'mr_lang' => $lang ),
+			array( 'mr_resource' => $modules, 'mr_lang' => $lang ), // SQL injection attack could occur here
 			__METHOD__
 		);
 
@@ -350,7 +350,7 @@ class MessageBlobStore {
 		$messages = array();
 
 		foreach ( $module->getMessages() as $key ) {
-			$messages[$key] = wfMsgExt( $key, array( 'language' => $lang ) );
+			$messages[$key] = wfMsgExt( $key, array( 'language' => $lang ) ); // lang could be user defined but it is whitelisted
 		}
 
 		return FormatJson::encode( (object)$messages );

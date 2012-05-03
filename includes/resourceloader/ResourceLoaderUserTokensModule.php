@@ -49,8 +49,10 @@ class ResourceLoaderUserTokensModule extends ResourceLoaderModule {
 	 * @param $context ResourceLoaderContext
 	 * @return string
 	 */
+	 // None of the parameters for the encodeJsCall are user defined
+	 // Ideally we do not need to change the encodeJsCall
 	public function getScript( ResourceLoaderContext $context ) {
-		return Xml::encodeJsCall( 'mw.user.tokens.set', 
+		return Xml::cspEncodeJsCall( 'mw.user.tokens.set', 
 			array( $this->contextUserTokens( $context ) ) );
 	}
 

@@ -3921,7 +3921,7 @@ class User {
 	}
 
 	/**
-	 * @todo document
+	 * @todo document -- this is soooo helpful. Thanks so much.
 	 */
 	protected function loadOptions() {
 		$this->load();

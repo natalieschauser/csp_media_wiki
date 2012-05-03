@@ -2452,14 +2452,14 @@ $templates
 						$resourceLoader->makeModuleResponse( $context, $modules )
 					);
 				} else {
-                    // $resourceLoader->makeModuleResponse( $context, $modules );
+                    $resourceLoader->makeModuleResponse( $context, $modules );
 					
 					
-                    $links .= Html::inlineScript(
-                     ResourceLoader::makeLoaderConditionalScript(
-                         $resourceLoader->makeModuleResponse( $context, $modules )
-                     )
-                    );
+                    // $links .= Html::inlineScript(
+                    //  ResourceLoader::makeLoaderConditionalScript(
+                    //      $resourceLoader->makeModuleResponse( $context, $modules, array(), true )
+                    //  )
+                    // );
 				}
 				continue;
 			}
