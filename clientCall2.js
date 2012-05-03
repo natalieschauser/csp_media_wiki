@@ -57,7 +57,16 @@ function parseCalls(clientFxnName) {
       if ( args[j][0] == '[' ) {
           args[j] = jQuery.parseJSON(args[j]);
       } else if ( args[j][0] == '"') {
-          args[j] = args[j].substring(1, args[j].length - 1);
+          temp = args[j].substring(1, args[j].length - 1);
+          originalLen = temp.length;
+          temp = temp.replace("\\\'", "'").replace("\\n","").replace("\\x3c", "<").replace("\\x3e",">");
+          newLen = temp.length;
+          while (originalLen > newLen){
+              originalLen = newLen;
+              temp = temp.replace("\\\'", "'").replace("\\n", "").replace("\\x3c", "<").replace("\\x3e",">");
+              newLen = temp.length;
+          }
+          args[j] = temp;
       }
       //alert(args[j]);
     }
